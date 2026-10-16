@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
-# tinta — empaqueta la extensión en dist/tinta-<version>.zip (uso: bash scripts/pack.sh)
-set -e
+# Build a distributable ZIP using Python 3 standard library.
+set -euo pipefail
 cd "$(dirname "$0")/.."
-
-ver=$(node -e "console.log(require('./manifest.json').version)" 2>/dev/null \
-  || python3 -c "import json; print(json.load(open('manifest.json'))['version'])" 2>/dev/null \
-  || grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]+"' manifest.json | head -1 | sed 's/.*"\([^"]*\)"$/\1/')
-
-mkdir -p dist
-out="dist/tinta-${ver}.zip"
-rm -f "$out"
-zip -qr "$out" manifest.json icons src LICENSES
-echo "✓ $out  ($(du -h "$out" | cut -f1))"
+python3 - <<'PYTHON'
+from pathlib import Path
+import json, zipfile
+version = json.loads(Path('manifest.json').read_text())['version']
+Path('dist').mkdir(exist_ok=True)
+output = Path('dist') / f'tinta-{version}.zip'
+with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED) as archive:
+    archive.write('manifest.json')
+    for directory in ('icons', 'src', 'LICENSES'):
+        if not Path(directory).is_dir():
+            raise RuntimeError(f'Missing required directory: {directory}')
+        for path in sorted(Path(directory).rglob('*')):
+            if path.is_file():
+                archive.write(path, str(path))
+print(f'{output} ({output.stat().st_size} bytes)')
+PYTHON

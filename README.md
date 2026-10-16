@@ -40,4 +40,4 @@ curl http://127.0.0.1:3136/extension/run \
   -d '{"extension":"tinta","url":"https://example.com","script":"return window.__tinta.extract()"}'
 ```
 
-Para generar un ZIP: `bash scripts/pack.sh`. Dependencias incluidas: Readability 0.5.0 (Apache-2.0) y Turndown 7.2.0 (MIT); sus avisos y licencias están en `LICENSES/`. No se declara una licencia nueva para el código original de Tinta.
+Para generar un ZIP (requiere Python 3): `bash scripts/pack.sh`. Dependencias incluidas: Readability 0.5.0 (Apache-2.0) y Turndown 7.2.0 (MIT); sus avisos y licencias están en `LICENSES/`. No se declara una licencia nueva para el código original de Tinta.
