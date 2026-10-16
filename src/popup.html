@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>tinta</h1>
+      <span id="meta" class="meta"></span>
+    </header>
+
+    <div id="actions" class="actions">
+      <button id="copy" class="btn" disabled>copiar markdown</button>
+      <button id="download" class="btn" disabled>descargar .md</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <pre id="preview" class="preview" hidden></pre>
+
+    <script src="popup.js" type="module"></script>
+  </body>
+</html>
